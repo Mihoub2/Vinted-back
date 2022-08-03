@@ -1,12 +1,19 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 mongoose.connect("mongodb://localhost:27017");
+
+cloudinary.config({
+  cloud_name: "dkemlj8lb",
+  api_key: "651799129757548",
+  api_secret: "yarlMBsodPfnKP7I103hKFuXLjs",
+});
 
 app.get("/", (req, res) => {
   console.log("route/");

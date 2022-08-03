@@ -4,9 +4,15 @@ const cloudinary = require("cloudinary").v2;
 const fileUpload = require("express-fileupload");
 
 const Offer = require("../models/Offer");
+const convertToBase64 = require("../middleware/convertToBase64");
 
 const isAuthenticated = require("../middleware/isAuthenticated");
 
+cloudinary.config({
+  cloud_name: "dkemlj8lb",
+  api_key: "651799129757548",
+  api_secret: "yarlMBsodPfnKP7I103hKFuXLjs",
+});
 router.get("/offers", async (req, res) => {
   try {
     let filters = {};
@@ -91,7 +97,7 @@ router.post(
       const { title, description, price, brand, size, condition, color, city } =
         req.body;
       if (title && price && req.files?.picture) {
-        const newOffer = newOffer({
+        const newOffer = new Offer({
           product_name: title,
           product_description: description,
           product_price: price,
@@ -104,10 +110,9 @@ router.post(
           ],
           owner: req.user,
         });
-
         if (
           Array.isArray(req.files.picture) === true ||
-          req.files.pictures.mimetype.slice(0, 5) !== "image"
+          req.files.picture.mimetype.slice(0, 5) !== "image"
         ) {
           res
             .status(400)
